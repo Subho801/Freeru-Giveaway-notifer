@@ -123,7 +123,7 @@ def send_discord(title, keys_left, link, image=None, event_type="started"):
             "description": f"✅ **Available!**\n🔑 **Keys left:** `{keys_left}`\n\n[Claim Giveaway]({link})",
             "color": 5763719,
             "footer": {
-                "text": "Subho's FreeRU Informer"
+                "text": "Subho's FreeRU Informer",
                 "icon_url": "https://files.catbox.moe/qttqpy.png"
             },
             "timestamp": datetime.now(timezone.utc).isoformat()
