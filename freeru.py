@@ -4,6 +4,7 @@ import re
 import requests
 from bs4 import BeautifulSoup
 from datetime import datetime, timezone
+from deep_translator import GoogleTranslator
 
 WEBHOOK = os.getenv("DISCORD_WEBHOOK")
 URL = "https://freeru.cc/games/giveaways/games"
