@@ -109,7 +109,7 @@ def send_discord(title, keys_left, link, image=None, event_type="started"):
         embed = {
             "title": f"⛔ {title}",
             "url": link,
-            "description": "❌ **Keys ran out!**\n\n[Open Giveaway]({})".format(link),
+            "description": "❌ **Expired!**\n\n[Open Giveaway]({})".format(link),
             "color": 15548997,
             "footer": {
                 "text": "Subho's FreeRU Giveaway"
@@ -120,7 +120,7 @@ def send_discord(title, keys_left, link, image=None, event_type="started"):
         embed = {
             "title": f"🎁 {title}",
             "url": link,
-            "description": f"✅ **Giveaway Started!**\n🔑 **Keys left:** `{keys_left}`\n\n[Claim Giveaway]({link})",
+            "description": f"✅ **Available!**\n🔑 **Keys left:** `{keys_left}`\n\n[Claim Giveaway]({link})",
             "color": 5763719,
             "footer": {
                 "text": "Subho's FreeRU Giveaway"
