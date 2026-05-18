@@ -124,6 +124,7 @@ def send_discord(title, keys_left, link, image=None, event_type="started"):
             "color": 5763719,
             "footer": {
                 "text": "Subho's FreeRU Giveaway"
+                "icon_url": "https://files.catbox.moe/qttqpy.png"
             },
             "timestamp": datetime.now(timezone.utc).isoformat()
         }
