@@ -62,14 +62,25 @@ def clean_title(title):
     return title
 
 
-def get_card_image(card):
-    img = card.find("img")
+def get_card_image(h):
+    # Search bigger parent blocks around title
+    parents = h.find_parents(limit=8)
 
-    if img:
-        for attr in ["src", "data-src", "data-lazy-src"]:
-            src = img.get(attr)
-            if src:
-                return requests.compat.urljoin(URL, src)
+    for parent in parents:
+        img = parent.find("img")
+        if img:
+            for attr in ["src", "data-src", "data-lazy-src", "data-original"]:
+                src = img.get(attr)
+                if src:
+                    return requests.compat.urljoin(URL, src)
+
+        # Sometimes image is in CSS background-image
+        style_tags = parent.find_all(style=True)
+        for tag in style_tags:
+            style = tag.get("style", "")
+            m = re.search(r'url\(["\']?(.*?)["\']?\)', style)
+            if m:
+                return requests.compat.urljoin(URL, m.group(1))
 
     return None
 
@@ -154,7 +165,7 @@ def scrape():
         current_ids.add(giveaway_id)
 
         title = clean_title(title_raw)
-        image = get_card_image(card)
+        image = get_card_image(h)
         keys_left = get_keys_left(text)
         active = is_active(text)
 
