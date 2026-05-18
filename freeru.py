@@ -17,27 +17,46 @@ def save_seen(seen):
     json.dump(sorted(seen), open(SEEN_FILE, "w", encoding="utf-8"), indent=2)
 
 def clean_title(title):
-    title = title.replace("Раздача ключей от игры в Steam -", "")
-    title = title.replace("Раздача ключей от игры Steam -", "")
-    title = title.replace("Раздача", "Giveaway")
-    return title.strip(" !")
+    title = re.sub(r"Раздача ключей от игры в Steam\s*-\s*", "", title, flags=re.I)
+    title = re.sub(r"Раздача ключей от игры Steam\s*-\s*", "", title, flags=re.I)
+    title = re.sub(r"\(.*?\)", "", title)
+    title = title.replace("!", "").strip()
+    return title
+
+def get_steam_image(title):
+    q = title.replace(" ", "+")
+    try:
+        r = requests.get(
+            f"https://store.steampowered.com/api/storesearch/?term={q}&l=english&cc=us",
+            headers=HEADERS,
+            timeout=20
+        )
+        data = r.json()
+        if data.get("items"):
+            appid = data["items"][0]["id"]
+            return f"https://cdn.cloudflare.steamstatic.com/steam/apps/{appid}/header.jpg"
+    except Exception:
+        pass
+    return None
 
 def send_discord(title, keys_left, link):
+    image = get_steam_image(title)
+
     embed = {
         "title": f"🎁 {title}",
         "url": link,
-        "description": f"✅ **Available!**\n🔑 **Keys left:** `{keys_left}`",
+        "description": f"✅ **Available!**\n🔑 **Keys left:** `{keys_left}`\n\n[Claim Giveaway]({link})",
         "color": 5763719,
         "footer": {
-            "text": "Megumin's FreeRU Giveaway"
+            "text": "Subho's FreeRU Giveaway"
         },
         "timestamp": datetime.now(timezone.utc).isoformat()
     }
 
-    payload = {
-        "content": "",
-        "embeds": [embed]
-    }
+    if image:
+        embed["image"] = {"url": image}
+
+    payload = {"embeds": [embed]}
 
     r = requests.post(WEBHOOK, json=payload, timeout=20)
     r.raise_for_status()
