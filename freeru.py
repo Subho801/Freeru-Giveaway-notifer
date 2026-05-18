@@ -45,16 +45,10 @@ def clean_title(title):
     title = re.sub(r"Раздача ключей от игры в Steam\s*-\s*", "", title, flags=re.I)
     title = re.sub(r"Раздача ключей от игры Steam\s*-\s*", "", title, flags=re.I)
 
-    replacements = {
-        "Раздача рандомных ключей от игры Steam 2025": "Random Steam Game Keys 2025",
-        "Более 20 разных игр": "Over 20 different games",
-        "Коллекционные карточки": "Trading Cards",
-        "в библиотеку": "Library Bonus",
-        "достижения": "Achievements",
-    }
-
-    for ru, en in replacements.items():
-        title = title.replace(ru, en)
+    try:
+        title = GoogleTranslator(source='ru', target='en').translate(title)
+    except Exception as e:
+        print("Translation error:", e)
 
     title = title.replace("!", "").strip()
     title = re.sub(r"\s+", " ", title)
