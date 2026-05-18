@@ -165,6 +165,13 @@ def scrape():
         keys_left = get_keys_left(text)
         active = is_active(text)
 
+        print("------------")
+        print("Title:", title)
+        print("Keys left:", keys_left)
+        print("Image:", image)
+        print("Active:", active)
+        print("Link:", link)
+
         if keys_left is None:
             keys_left = 0
 
